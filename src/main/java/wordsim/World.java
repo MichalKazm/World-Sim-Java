@@ -12,6 +12,14 @@ public class World {
         this.cols = cols;
     }
 
+    public int getRows() {
+        return rows;
+    }
+
+    public int getCols() {
+        return cols;
+    }
+
     public void addOrganism(Organism organism) {
         if (organism.getY() < rows && organism.getX() < cols && organism.getY() >= 0 && organism.getX() >= 0) {
             order.add(organism);
