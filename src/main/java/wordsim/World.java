@@ -1,0 +1,33 @@
+package main.java.wordsim;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class World {
+    private int rows, cols;
+    ArrayList<Organism> order;
+
+    public World(int rows, int cols) {
+        this.rows = rows;
+        this.cols = cols;
+    }
+
+    public void addOrganism(Organism organism) {
+        if (organism.getY() < rows && organism.getX() < cols && organism.getY() >= 0 && organism.getX() >= 0) {
+            order.add(organism);
+        }
+    }
+
+    public void sortOrder() {
+        for (int i = 0; i < order.size() - 1; i++) {
+            for (int j = i + 1; j < order.size(); j++) {
+                if (order.get(j).getInitiative() > order.get(i).getInitiative()) {
+                    Collections.swap(order, i, j);
+                }
+            else if (order.get(j).getInitiative() == order.get(i).getInitiative() && order.get(j).getAge() > order.get(i).getAge()) {
+                    Collections.swap(order, i, j);
+                }
+            }
+        }
+    }
+}
