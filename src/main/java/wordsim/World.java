@@ -20,10 +20,25 @@ public class World {
         return cols;
     }
 
-    public void addOrganism(Organism organism) {
+    public boolean addOrganism(Organism organism) {
         if (organism.getY() < rows && organism.getX() < cols && organism.getY() >= 0 && organism.getX() >= 0) {
+            organism.setWorld(this);
             order.add(organism);
+            return true;
         }
+        else {
+            return false;
+        }
+    }
+
+    public Organism getOrganism(int y, int x) {
+        for (Organism organism : order) {
+            if (!organism.isDead() && organism.getY() == y && organism.getX() == x) {
+                return organism;
+            }
+        }
+
+        return null;
     }
 
     public void sortOrder() {

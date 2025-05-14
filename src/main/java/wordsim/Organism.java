@@ -6,13 +6,12 @@ public abstract class Organism {
     protected boolean alive;
     protected World world;
 
-    public Organism (int strength, int initiative, int y, int x, char symbol) {
+    public Organism(int strength, int initiative, int y, int x) {
         this.strength = strength;
         this.initiative = initiative;
         this.y = y;
         this.x = x;
         this.age = 0;
-        this.symbol = symbol;
         this.alive = true;
         this.world = null;
     }
@@ -49,8 +48,13 @@ public abstract class Organism {
         alive = false;
     }
 
-    public abstract void Action();
+    public void setWorld(World world) {
+        this.world = world;
+    }
 
-    public abstract void Collision();
-    
+    public abstract Organism createNew(int y, int x);
+
+    public abstract void collision(Organism other);
+
+    public abstract void action();
 }
