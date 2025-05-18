@@ -1,17 +1,20 @@
 package main.java.wordsim;
 
+import main.java.wordsim.worlds.World;
+
 public abstract class Organism {
     protected int strength, initiative, y, x, age;
     protected char symbol;
     protected boolean alive;
     protected World world;
 
-    public Organism(int strength, int initiative, int y, int x) {
+    public Organism(int strength, int initiative, int y, int x, char symbol) {
         this.strength = strength;
         this.initiative = initiative;
         this.y = y;
         this.x = x;
         this.age = 0;
+        this.symbol = symbol;
         this.alive = true;
         this.world = null;
     }
@@ -24,12 +27,12 @@ public abstract class Organism {
         return initiative;
     }
 
-    public int getX() {
-        return x;
-    }
-
     public int getY() {
         return y;
+    }
+
+    public int getX() {
+        return x;
     }
 
     public int getAge() {
@@ -45,7 +48,7 @@ public abstract class Organism {
     }
 
     public void dies() {
-        alive = false;
+        this.alive = false;
     }
 
     public void setWorld(World world) {

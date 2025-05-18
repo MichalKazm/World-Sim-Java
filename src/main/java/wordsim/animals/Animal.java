@@ -4,8 +4,8 @@ import main.java.wordsim.Organism;
 import java.util.Random;
 
 public abstract class Animal extends Organism {
-    public Animal(int strength, int initiative, int x, int y, char symbol) {
-        super(strength, initiative, y, x);
+    public Animal(int strength, int initiative, int y, int x, char symbol) {
+        super(strength, initiative, y, x, symbol);
     }
 
     @Override

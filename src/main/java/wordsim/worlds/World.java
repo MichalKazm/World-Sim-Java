@@ -1,15 +1,25 @@
-package main.java.wordsim;
+package main.java.wordsim.worlds;
 
+import main.java.wordsim.Organism;
+
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class World {
-    private int rows, cols;
-    ArrayList<Organism> order;
+public abstract class World {
+    protected int rows, cols;
+    protected ArrayList<Organism> order;
+    protected JPanel[][] cells;
+    protected JFrame frame;
 
     public World(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
+        this.order = new ArrayList<>();
+        this.cells = new JPanel[rows][cols];
+        this.frame = new JFrame("Simulator");
+
+        this.initWindow();
     }
 
     public int getRows() {
@@ -41,7 +51,7 @@ public class World {
         return null;
     }
 
-    public void sortOrder() {
+    protected void sortOrder() {
         for (int i = 0; i < order.size() - 1; i++) {
             for (int j = i + 1; j < order.size(); j++) {
                 if (order.get(j).getInitiative() > order.get(i).getInitiative()) {
@@ -53,4 +63,10 @@ public class World {
             }
         }
     }
+
+    protected abstract void initWindow();
+
+    protected abstract void clearGame();
+
+    protected abstract void updateGame();
 }
