@@ -1,11 +1,13 @@
 package main.java.wordsim.animals;
 
 import main.java.wordsim.Organism;
+
+import java.awt.*;
 import java.util.Random;
 
 public class Fox extends Animal {
     public Fox(int y, int x) {
-        super(3, 7, y, x, 'F');
+        super(3, 7, y, x, 'F', Color.ORANGE);
     }
 
     @Override

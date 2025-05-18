@@ -1,11 +1,13 @@
 package main.java.wordsim.animals;
 
 import main.java.wordsim.Organism;
+
+import java.awt.*;
 import java.util.Random;
 
 public abstract class Animal extends Organism {
-    public Animal(int strength, int initiative, int y, int x, char symbol) {
-        super(strength, initiative, y, x, symbol);
+    public Animal(int strength, int initiative, int y, int x, char symbol, Color color) {
+        super(strength, initiative, y, x, symbol, color);
     }
 
     @Override

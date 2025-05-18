@@ -2,9 +2,11 @@ package main.java.wordsim.animals;
 
 import main.java.wordsim.Organism;
 
+import java.awt.*;
+
 public class Sheep extends Animal {
     public Sheep(int y, int x) {
-        super(4, 4, y, x, 'S');
+        super(4, 4, y, x, 'S', Color.PINK);
     }
 
     @Override

@@ -3,6 +3,7 @@ package main.java.wordsim.worlds;
 import main.java.wordsim.Organism;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -85,9 +86,53 @@ public abstract class World {
 
     protected abstract void initWindow();
 
-    protected abstract void clearGame();
+    protected void clearGame() {
+        for (int i = 0; i < this.rows; i++) {
+            for (int j = 0; j < this.cols; j++) {
+                JPanel cell = cells[i][j];
+                cell.setBackground(Color.WHITE);
+                JLabel text = (JLabel) cell.getComponent(0);
+                text.setText("");
+            }
+        }
+    }
 
-    public abstract void updateGame();
+    public void updateGame() {
+        clearGame();
 
-    protected abstract void takeTurn();
+        for (Organism organism : order) {
+            if (!organism.isDead()) {
+                JPanel cell = cells[organism.getY()][organism.getX()];
+                cell.setBackground(organism.getColor());
+                JLabel text = (JLabel) cell.getComponent(0);
+                text.setText(Character.toString(organism.getSymbol()));
+            }
+        }
+
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    protected void takeTurn() {
+        sortOrder();
+
+        // Number of organisms before the turn
+        int n = order.size();
+
+        appendLog("-- Turn " + Integer.toString(turn) + " --\n");
+
+        // Only organisms that are alive and created before the turn will take action
+        for (int i = 0; i < n; i++) {
+            if (!order.get(i).isDead()) {
+                order.get(i).action();
+            }
+        }
+
+        // Display latest logs
+        logs.setCaretPosition(logs.getDocument().getLength());
+
+        removeDead();
+        updateGame();
+        turn++;
+    }
 }

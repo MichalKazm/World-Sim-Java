@@ -2,19 +2,23 @@ package main.java.wordsim;
 
 import main.java.wordsim.worlds.World;
 
+import java.awt.*;
+
 public abstract class Organism {
     protected int strength, initiative, y, x, age;
     protected char symbol;
+    protected Color color;
     protected boolean alive;
     protected World world;
 
-    public Organism(int strength, int initiative, int y, int x, char symbol) {
+    public Organism(int strength, int initiative, int y, int x, char symbol, Color color) {
         this.strength = strength;
         this.initiative = initiative;
         this.y = y;
         this.x = x;
         this.age = 0;
         this.symbol = symbol;
+        this.color = color;
         this.alive = true;
         this.world = null;
     }
@@ -42,6 +46,8 @@ public abstract class Organism {
     public char getSymbol() {
         return symbol;
     }
+
+    public Color getColor() { return color; }
 
     public boolean isDead() {
         return !alive;
