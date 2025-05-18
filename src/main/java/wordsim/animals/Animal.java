@@ -46,6 +46,10 @@ public abstract class Animal extends Organism {
         else {
             world.appendLog(this.getName() + ": Attacked " + other.getName() + "\n");
 
+            if (other.getClass() == Antelope.class) {
+                y = other.getY();
+                x = other.getX();
+            }
             if (!other.didDeflectAttack(this)) {
                 y = other.getY();
                 x = other.getX();
