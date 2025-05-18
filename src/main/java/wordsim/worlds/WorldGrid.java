@@ -4,6 +4,8 @@ import main.java.wordsim.Organism;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class WorldGrid extends World {
     public WorldGrid(int rows, int cols) {
@@ -14,8 +16,6 @@ public class WorldGrid extends World {
     protected void initWindow() {
         // Initialize frame
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(this.rows * 26 - 1, this.cols * 26 - 1);
-        frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setLayout(new BorderLayout());
 
@@ -28,13 +28,34 @@ public class WorldGrid extends World {
                 // Creating and adding cells to a grid
                 JPanel cell = new JPanel();
                 JLabel text = new JLabel();
+                cell.setPreferredSize(new Dimension(25, 25));
                 cell.add(text);
                 gamePanel.add(cell);
                 cells[i][j] = cell;
             }
         }
 
-        frame.add(gamePanel);
+        gamePanel.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, Color.BLACK));
+        frame.add(gamePanel, BorderLayout.CENTER);
+
+        // Initialize button panel
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+        JButton nextTurnButton = new JButton("Next turn");
+        nextTurnButton.setFocusable(false);
+
+        nextTurnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                takeTurn();
+            }
+        });
+        buttonPanel.add(nextTurnButton);
+
+        frame.add(buttonPanel, BorderLayout.SOUTH);
+
+        updateGame();
+        frame.pack();
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
@@ -61,5 +82,24 @@ public class WorldGrid extends World {
                 text.setText(Character.toString(organism.getSymbol()));
             }
         }
+    }
+
+    @Override
+    protected void takeTurn() {
+        sortOrder();
+
+        // Number of organisms before the turn
+        int n = order.size();
+
+        // Only organisms that are alive and created before the turn will take action
+        for (int i = 0; i < n; i++) {
+            if (!order.get(i).isDead()) {
+                order.get(i).action();
+            }
+        }
+
+        removeDead();
+        updateGame();
+        turn++;
     }
 }

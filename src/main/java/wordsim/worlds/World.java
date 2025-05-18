@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public abstract class World {
-    protected int rows, cols;
+    protected int rows, cols, turn;
     protected ArrayList<Organism> order;
     protected JPanel[][] cells;
     protected JFrame frame;
@@ -15,6 +15,7 @@ public abstract class World {
     public World(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
+        this.turn = 0;
         this.order = new ArrayList<>();
         this.cells = new JPanel[rows][cols];
         this.frame = new JFrame("Simulator");
@@ -51,6 +52,15 @@ public abstract class World {
         return null;
     }
 
+    protected void removeDead() {
+        for (int i = 0; i < order.size(); i++) {
+            if (order.get(i).isDead()) {
+                order.remove(i);
+                i--;
+            }
+        }
+    }
+
     protected void sortOrder() {
         for (int i = 0; i < order.size() - 1; i++) {
             for (int j = i + 1; j < order.size(); j++) {
@@ -69,4 +79,6 @@ public abstract class World {
     protected abstract void clearGame();
 
     protected abstract void updateGame();
+
+    protected abstract void takeTurn();
 }
