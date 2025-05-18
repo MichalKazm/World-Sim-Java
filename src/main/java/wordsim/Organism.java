@@ -49,6 +49,10 @@ public abstract class Organism {
 
     public Color getColor() { return color; }
 
+    public boolean didDeflectAttack(Organism attacker) {
+        return false;
+    }
+
     public boolean isDead() {
         return !alive;
     }

@@ -46,13 +46,14 @@ public abstract class Animal extends Organism {
         else {
             world.appendLog(this.getName() + ": Attacked " + other.getName() + "\n");
 
-            y = other.getY();
-            x = other.getX();
-            if (strength >= other.getStrength()) {
-                other.dies();
-            }
-            else {
-                this.dies();
+            if (!other.didDeflectAttack(this)) {
+                y = other.getY();
+                x = other.getX();
+                if (strength >= other.getStrength()) {
+                    other.dies();
+                } else {
+                    this.dies();
+                }
             }
         }
     }
