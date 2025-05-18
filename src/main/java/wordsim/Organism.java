@@ -48,6 +48,7 @@ public abstract class Organism {
     }
 
     public void dies() {
+        world.appendLog(this.getName() + ": Died\n");
         this.alive = false;
     }
 

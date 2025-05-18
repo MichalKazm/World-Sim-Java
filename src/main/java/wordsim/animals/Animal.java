@@ -127,7 +127,6 @@ public abstract class Animal extends Organism {
                 x = newX;
             }
             else {
-
                 collision(other);
             }
         }

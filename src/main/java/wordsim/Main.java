@@ -1,5 +1,6 @@
 package main.java.wordsim;
 
+import main.java.wordsim.animals.Fox;
 import main.java.wordsim.animals.Sheep;
 import main.java.wordsim.animals.Wolf;
 import main.java.wordsim.worlds.WorldGrid;
@@ -14,6 +15,7 @@ public class Main {
         world.addOrganism(new Sheep(10, 10));
         world.addOrganism(new Sheep(11, 11));
         world.addOrganism(new Sheep(10, 11));
+        world.addOrganism(new Fox(5,0));
 
         world.updateGame();
     }

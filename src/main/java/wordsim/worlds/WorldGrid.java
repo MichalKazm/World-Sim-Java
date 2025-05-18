@@ -116,7 +116,7 @@ public class WorldGrid extends World {
             }
         }
 
-        // Update log caret
+        // Display latest logs
         logs.setCaretPosition(logs.getDocument().getLength());
 
         removeDead();
