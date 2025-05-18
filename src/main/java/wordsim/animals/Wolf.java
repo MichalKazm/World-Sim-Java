@@ -8,6 +8,11 @@ public class Wolf extends Animal {
     }
 
     @Override
+    public String getName() {
+        return "Wolf (" + Integer.toString(y) + ", " + Integer.toString(x) + ")";
+    }
+
+    @Override
     public Organism createNew(int y, int x) {
         return new Wolf(y, x);
     }

@@ -35,7 +35,7 @@ public class WorldGrid extends World {
             }
         }
 
-        gamePanel.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, Color.BLACK));
+        gamePanel.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 3, Color.BLACK));
         frame.add(gamePanel, BorderLayout.CENTER);
 
         // Initialize button panel
@@ -52,6 +52,19 @@ public class WorldGrid extends World {
         buttonPanel.add(nextTurnButton);
 
         frame.add(buttonPanel, BorderLayout.SOUTH);
+
+        // Initialize log area
+        logs.setEditable(false);
+        logs.setLineWrap(true);
+        logs.setWrapStyleWord(true);
+        logs.setFocusable(false);
+        logs.setFont(new Font("Serif", Font.PLAIN, 14));
+
+        JScrollPane logPane = new JScrollPane(logs);
+        logPane.setPreferredSize(new Dimension( 400, 0));
+
+        frame.add(logPane, BorderLayout.EAST);
+
 
         updateGame();
         frame.pack();
@@ -94,12 +107,17 @@ public class WorldGrid extends World {
         // Number of organisms before the turn
         int n = order.size();
 
+        appendLog("-- Turn " + Integer.toString(turn) + " --\n");
+
         // Only organisms that are alive and created before the turn will take action
         for (int i = 0; i < n; i++) {
             if (!order.get(i).isDead()) {
                 order.get(i).action();
             }
         }
+
+        // Update log caret
+        logs.setCaretPosition(logs.getDocument().getLength());
 
         removeDead();
         updateGame();

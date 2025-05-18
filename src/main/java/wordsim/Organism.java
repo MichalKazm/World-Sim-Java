@@ -55,6 +55,8 @@ public abstract class Organism {
         this.world = world;
     }
 
+    public abstract String getName();
+
     public abstract Organism createNew(int y, int x);
 
     public abstract void collision(Organism other);

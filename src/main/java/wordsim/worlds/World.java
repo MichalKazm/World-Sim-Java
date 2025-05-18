@@ -9,16 +9,20 @@ import java.util.Collections;
 public abstract class World {
     protected int rows, cols, turn;
     protected ArrayList<Organism> order;
+    protected JTextArea logs;
     protected JPanel[][] cells;
     protected JFrame frame;
 
     public World(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
-        this.turn = 0;
+        this.turn = 1;
         this.order = new ArrayList<>();
+        this.logs = new JTextArea();
         this.cells = new JPanel[rows][cols];
         this.frame = new JFrame("Simulator");
+
+        logs.append("-- Turn 0 --\n");
 
         this.initWindow();
     }
@@ -35,6 +39,7 @@ public abstract class World {
         if (organism.getY() < rows && organism.getX() < cols && organism.getY() >= 0 && organism.getX() >= 0) {
             organism.setWorld(this);
             order.add(organism);
+            appendLog(organism.getName() + ": Was created\n");
             return true;
         }
         else {
@@ -50,6 +55,10 @@ public abstract class World {
         }
 
         return null;
+    }
+
+    public void appendLog(String message) {
+        logs.append(message);
     }
 
     protected void removeDead() {

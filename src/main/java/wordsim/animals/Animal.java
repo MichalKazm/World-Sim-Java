@@ -36,8 +36,14 @@ public abstract class Animal extends Organism {
             if ((!success) && (world.getOrganism(other.getY(), other.getX() - 1) == null)) {
                 success = world.addOrganism(createNew(other.getY(), other.getX() - 1));
             }
+
+            if (success) {
+                world.appendLog(this.getName() + ": Reproduce with " + other.getName() + "\n");
+            }
         }
         else {
+            world.appendLog(this.getName() + ": Attacked " + other.getName() + "\n");
+
             y = other.getY();
             x = other.getX();
             if (strength >= other.getStrength()) {
@@ -116,10 +122,12 @@ public abstract class Animal extends Organism {
             Organism other = world.getOrganism(newY, newX);
 
             if (other == null) {
+                world.appendLog(this.getName() + ": Moved to (" + Integer.toString(newY) + ", " + Integer.toString(newX) + ")\n");
                 y = newY;
                 x = newX;
             }
             else {
+
                 collision(other);
             }
         }

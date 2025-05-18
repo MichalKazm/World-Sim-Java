@@ -8,6 +8,11 @@ public class Sheep extends Animal {
     }
 
     @Override
+    public String getName() {
+        return "Sheep (" + Integer.toString(y) + ", " + Integer.toString(x) + ")";
+    }
+
+    @Override
     public Organism createNew(int y, int x) {
         return new Sheep(y, x);
     }
