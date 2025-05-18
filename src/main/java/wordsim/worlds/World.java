@@ -78,7 +78,7 @@ public abstract class World {
 
     protected abstract void clearGame();
 
-    protected abstract void updateGame();
+    public abstract void updateGame();
 
     protected abstract void takeTurn();
 }

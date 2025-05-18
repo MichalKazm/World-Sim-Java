@@ -72,7 +72,7 @@ public class WorldGrid extends World {
     }
 
     @Override
-    protected void updateGame() {
+    public void updateGame() {
         clearGame();
 
         for (Organism organism : order) {
@@ -82,6 +82,9 @@ public class WorldGrid extends World {
                 text.setText(Character.toString(organism.getSymbol()));
             }
         }
+
+        frame.revalidate();
+        frame.repaint();
     }
 
     @Override
