@@ -23,7 +23,7 @@ public class DeadlyNightshade extends Plant {
     public void collision(Organism other) {
         world.appendLog(other.getName() + ": Ate " + this.getName() + "\n");
 
-        if (getStrength() <= other.getStrength()) {
+        if (this.getStrength() <= other.getStrength()) {
             this.dies();
         }
 
