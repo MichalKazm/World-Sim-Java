@@ -133,7 +133,7 @@ public class Fox extends Animal {
                 if (other instanceof Plant) {
                     y = newY;
                     x = newX;
-                    world.appendLog(getName() + ": Moved to (" + Integer.toString(newY) + ", " + Integer.toString(newX) + ")");
+                    world.appendLog(getName() + ": Moved to (" + Integer.toString(newY) + ", " + Integer.toString(newX) + ")\n");
                     other.collision(this);
                 }
                 else {

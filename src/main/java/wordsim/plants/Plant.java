@@ -11,7 +11,7 @@ public abstract class Plant extends Organism {
 
     @Override
     public void collision(Organism other) {
-        world.appendLog(other.getName() + ": Ate " + getName());
+        world.appendLog(other.getName() + ": Ate " + getName() + "\n");
         this.dies();
     }
 
@@ -84,7 +84,7 @@ public abstract class Plant extends Organism {
             }
 
             if (chosenCell < 0) {
-                world.appendLog(this.getName() + ": Spread to (" + Integer.toString(newY) + ", " + Integer.toString(newX) + ")");
+                world.appendLog(this.getName() + ": Spread to (" + Integer.toString(newY) + ", " + Integer.toString(newX) + ")\n");
             }
         }
 
