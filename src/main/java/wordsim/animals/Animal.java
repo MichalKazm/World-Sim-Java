@@ -13,6 +13,7 @@ public abstract class Animal extends Organism {
 
     @Override
     public void collision(Organism other) {
+        // If two organisms are of the same type, they reproduce
         if (this.getClass() == other.getClass()) {
             boolean success = false;
             if (world.getOrganism(y - 1, x) == null) {
@@ -47,7 +48,7 @@ public abstract class Animal extends Organism {
         else {
             world.appendLog(this.getName() + ": Attacked " + other.getName() + "\n");
 
-            if (other.getClass() == Antelope.class) {
+            if (other instanceof Antelope) {
                 y = other.getY();
                 x = other.getX();
             }
@@ -136,9 +137,9 @@ public abstract class Animal extends Organism {
             }
             else {
                 if (other instanceof Plant) {
+                    world.appendLog(getName() + ": Moved to (" + Integer.toString(newY) + ", " + Integer.toString(newX) + ")\n");
                     y = newY;
                     x = newX;
-                    world.appendLog(getName() + ": Moved to (" + Integer.toString(newY) + ", " + Integer.toString(newX) + ")\n");
                     other.collision(this);
                 }
                 else {

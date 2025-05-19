@@ -1,6 +1,7 @@
 package main.java.wordsim.plants;
 
 import main.java.wordsim.Organism;
+
 import java.awt.*;
 import java.util.Random;
 
@@ -11,7 +12,7 @@ public abstract class Plant extends Organism {
 
     @Override
     public void collision(Organism other) {
-        world.appendLog(other.getName() + ": Ate " + getName() + "\n");
+        world.appendLog(other.getName() + ": Ate " + this.getName() + "\n");
         this.dies();
     }
 

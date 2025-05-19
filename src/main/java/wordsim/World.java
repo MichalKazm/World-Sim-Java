@@ -1,0 +1,284 @@
+package main.java.wordsim;
+
+import main.java.wordsim.animals.Human;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class World {
+    protected int rows, cols, turn;
+    protected Human human;
+    protected ArrayList<Organism> order;
+    protected JTextArea logs;
+    protected JPanel[][] cells;
+    protected JFrame frame;
+
+    public World(int rows, int cols) {
+        this.rows = rows;
+        this.cols = cols;
+        this.turn = 1;
+        this.human = null;
+        this.order = new ArrayList<>();
+        this.logs = new JTextArea();
+        this.cells = new JPanel[rows][cols];
+        this.frame = new JFrame("Simulator");
+
+        logs.append("-- Turn 0 --\n");
+
+        this.initWindow();
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public int getCols() {
+        return cols;
+    }
+
+    public boolean addOrganism(Organism organism) {
+        boolean addedHuman = false;
+
+        // Only one human can be present in the world
+        if (organism instanceof Human) {
+            if (human == null) {
+                human = (Human) organism;
+                addedHuman = true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        if (organism.getY() < rows && organism.getX() < cols && organism.getY() >= 0 && organism.getX() >= 0) {
+            organism.setWorld(this);
+            order.add(organism);
+            appendLog(organism.getName() + ": Was created\n");
+            return true;
+        }
+        else {
+            if (addedHuman) {
+                human = null;
+            }
+            return false;
+        }
+    }
+
+    public Organism getOrganism(int y, int x) {
+        for (Organism organism : order) {
+            if (!organism.isDead() && organism.getY() == y && organism.getX() == x) {
+                return organism;
+            }
+        }
+
+        return null;
+    }
+
+    public void appendLog(String message) {
+        logs.append(message);
+    }
+
+    protected void removeDead() {
+        for (int i = 0; i < order.size(); i++) {
+            if (order.get(i).isDead()) {
+                if (order.get(i) instanceof Human) {
+                    human = null;
+                }
+                order.remove(i);
+                i--;
+            }
+        }
+    }
+
+    protected void sortOrder() {
+        for (int i = 0; i < order.size() - 1; i++) {
+            for (int j = i + 1; j < order.size(); j++) {
+                if (order.get(j).getInitiative() > order.get(i).getInitiative()) {
+                    Collections.swap(order, i, j);
+                }
+                else if (order.get(j).getInitiative() == order.get(i).getInitiative() && order.get(j).getAge() > order.get(i).getAge()) {
+                    Collections.swap(order, i, j);
+                }
+            }
+        }
+    }
+
+    protected void initWindow() {
+        // Initialize frame
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setLayout(new BorderLayout());
+
+        // Initialize game panel
+        JPanel gamePanel = new JPanel(new GridLayout(this.rows, this.cols, 1, 1));
+        gamePanel.setBackground(Color.BLACK);
+        gamePanel.setFocusable(true);
+
+        // Creating and adding cells to a grid
+        for (int i = 0; i < this.rows; i++) {
+            for (int j = 0; j < this.cols; j++) {
+                JPanel cell = new JPanel();
+                JLabel text = new JLabel();
+                cell.setPreferredSize(new Dimension(25, 25));
+                cell.add(text);
+                gamePanel.add(cell);
+                cells[i][j] = cell;
+            }
+        }
+
+        // Handle key inputs
+        // Up
+        gamePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("W"), "moveUp");
+        gamePanel.getActionMap().put("moveUp", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (human != null) {
+                    human.setNextMove('w');
+                    takeTurn();
+                }
+            }
+        });
+        // Down
+        gamePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("S"), "moveDown");
+        gamePanel.getActionMap().put("moveDown", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (human != null) {
+                    human.setNextMove('s');
+                    takeTurn();
+                }
+            }
+        });
+        // Left
+        gamePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("A"), "moveLeft");
+        gamePanel.getActionMap().put("moveLeft", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (human != null) {
+                    human.setNextMove('a');
+                    takeTurn();
+                }
+            }
+        });
+        // Right
+        gamePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("D"), "moveRight");
+        gamePanel.getActionMap().put("moveRight", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (human != null) {
+                    human.setNextMove('d');
+                    takeTurn();
+                }
+            }
+        });
+        // Ability
+        gamePanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F"), "activateAbility");
+        gamePanel.getActionMap().put("activateAbility", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (human != null && human.getAbilityTimer() == - 5) {
+                    human.setAbilityTimer(5);
+                    updateGame();
+                }
+            }
+        });
+
+        gamePanel.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 3, Color.BLACK));
+        frame.add(gamePanel, BorderLayout.CENTER);
+
+        // Initialize button panel
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+        JButton nextTurnButton = new JButton("Next turn");
+        nextTurnButton.setFocusable(false);
+
+        nextTurnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (human != null) {
+                    human.setNextMove(' ');
+                }
+                takeTurn();
+            }
+        });
+        buttonPanel.add(nextTurnButton);
+
+        frame.add(buttonPanel, BorderLayout.SOUTH);
+
+        // Initialize log area
+        logs.setEditable(false);
+        logs.setLineWrap(true);
+        logs.setWrapStyleWord(true);
+        logs.setFocusable(false);
+        logs.setFont(new Font("Serif", Font.PLAIN, 14));
+
+        JScrollPane logPane = new JScrollPane(logs);
+        logPane.setPreferredSize(new Dimension( 400, 0));
+
+        frame.add(logPane, BorderLayout.EAST);
+
+
+        updateGame();
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+
+    protected void clearGame() {
+        for (int i = 0; i < this.rows; i++) {
+            for (int j = 0; j < this.cols; j++) {
+                JPanel cell = cells[i][j];
+                cell.setBackground(Color.WHITE);
+                JLabel text = (JLabel) cell.getComponent(0);
+                text.setText("");
+            }
+        }
+    }
+
+    public void updateGame() {
+        clearGame();
+
+        for (Organism organism : order) {
+            if (!organism.isDead()) {
+                JPanel cell = cells[organism.getY()][organism.getX()];
+                cell.setBackground(organism.getColor());
+
+                if (organism instanceof Human && human.getAbilityTimer() > 0) {
+                    cell.setBackground(human.getAbilityColor());
+                }
+
+                JLabel text = (JLabel) cell.getComponent(0);
+                text.setText(Character.toString(organism.getSymbol()));
+            }
+        }
+
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    protected void takeTurn() {
+        sortOrder();
+
+        // Number of organisms before the turn
+        int n = order.size();
+
+        appendLog("-- Turn " + Integer.toString(turn) + " --\n");
+
+        // Only organisms that are alive and created before the turn will take action
+        for (int i = 0; i < n; i++) {
+            if (!order.get(i).isDead()) {
+                order.get(i).action();
+            }
+        }
+
+        // Display latest logs
+        logs.setCaretPosition(logs.getDocument().getLength());
+
+        removeDead();
+        updateGame();
+        turn++;
+    }
+}

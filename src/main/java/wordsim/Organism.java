@@ -1,7 +1,5 @@
 package main.java.wordsim;
 
-import main.java.wordsim.worlds.World;
-
 import java.awt.*;
 
 public abstract class Organism {

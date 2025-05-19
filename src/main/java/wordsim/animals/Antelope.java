@@ -140,9 +140,9 @@ public class Antelope extends Animal {
             }
             else {
                 if (other instanceof Plant) {
+                    world.appendLog(getName() + ": Moved to (" + Integer.toString(newY) + ", " + Integer.toString(newX) + ")\n");
                     y = newY;
                     x = newX;
-                    world.appendLog(getName() + ": Moved to (" + Integer.toString(newY) + ", " + Integer.toString(newX) + ")\n");
                     other.collision(this);
                 }
                 else {

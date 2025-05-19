@@ -2,14 +2,12 @@ package main.java.wordsim;
 
 import main.java.wordsim.animals.*;
 import main.java.wordsim.plants.*;
-import main.java.wordsim.worlds.WorldGrid;
 
 public class Main {
     public static void main(String[] args) {
-        WorldGrid world = new WorldGrid(30,50);
+        World world = new World(30,50);
 
         world.addOrganism(new Wolf(0, 0));
-        world.addOrganism(new Wolf(0, 1));
         world.addOrganism(new Wolf(1, 0));
         world.addOrganism(new Sheep(10, 10));
         world.addOrganism(new Sheep(11, 11));
@@ -22,6 +20,7 @@ public class Main {
         world.addOrganism(new Guarana(10, 20));
         world.addOrganism(new DeadlyNightshade(20, 30));
         world.addOrganism(new Hogweed(15, 40));
+        world.addOrganism(new Human(20, 20));
 
         world.updateGame();
     }
