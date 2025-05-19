@@ -1,11 +1,11 @@
 package main.java.wordsim;
 
-import main.java.wordsim.animals.Human;
+import main.java.wordsim.animals.*;
+import main.java.wordsim.plants.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -125,6 +125,162 @@ public class World {
                 JLabel text = new JLabel();
                 cell.setPreferredSize(new Dimension(25, 25));
                 cell.add(text);
+
+                // Create popup menu
+                JPopupMenu creationMenu = new JPopupMenu();
+
+                int currentRow = i;
+                int currentCol = j;
+
+                JMenuItem dandelionItem = new JMenuItem("Dandelion");
+                dandelionItem.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        addOrganism(new Dandelion(currentRow, currentCol));
+                        updateGame();
+                        creationMenu.setVisible(false);
+                    }
+                });
+                creationMenu.add(dandelionItem);
+
+                JMenuItem deadlyNightshadeItem = new JMenuItem("DeadlyNightshade");
+                deadlyNightshadeItem.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        addOrganism(new DeadlyNightshade(currentRow, currentCol));
+                        updateGame();
+                        creationMenu.setVisible(false);
+                    }
+                });
+                creationMenu.add(deadlyNightshadeItem);
+
+                JMenuItem grassItem = new JMenuItem("Grass");
+                grassItem.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        addOrganism(new Grass(currentRow, currentCol));
+                        updateGame();
+                        creationMenu.setVisible(false);
+                    }
+                });
+                creationMenu.add(grassItem);
+
+                JMenuItem guaranaItem = new JMenuItem("Guarana");
+                guaranaItem.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        addOrganism(new Guarana(currentRow, currentCol));
+                        updateGame();
+                        creationMenu.setVisible(false);
+                    }
+                });
+                creationMenu.add(guaranaItem);
+
+                JMenuItem hogweedItem = new JMenuItem("Hogweed");
+                hogweedItem.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        addOrganism(new Hogweed(currentRow, currentCol));
+                        updateGame();
+                        creationMenu.setVisible(false);
+                    }
+                });
+                creationMenu.add(hogweedItem);
+
+                JMenuItem antelopeItem = new JMenuItem("Antelope");
+                antelopeItem.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        addOrganism(new Antelope(currentRow, currentCol));
+                        updateGame();
+                        creationMenu.setVisible(false);
+                    }
+                });
+                creationMenu.add(antelopeItem);
+
+                JMenuItem foxItem = new JMenuItem("Fox");
+                foxItem.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        addOrganism(new Fox(currentRow, currentCol));
+                        updateGame();
+                        creationMenu.setVisible(false);
+                    }
+                });
+                creationMenu.add(foxItem);
+
+                JMenuItem sheepItem = new JMenuItem("Sheep");
+                sheepItem.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        addOrganism(new Sheep(currentRow, currentCol));
+                        updateGame();
+                        creationMenu.setVisible(false);
+                    }
+                });
+                creationMenu.add(sheepItem);
+
+                JMenuItem turtleItem = new JMenuItem("Turtle");
+                turtleItem.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        addOrganism(new Turtle(currentRow, currentCol));
+                        updateGame();
+                        creationMenu.setVisible(false);
+                    }
+                });
+                creationMenu.add(turtleItem);
+
+                JMenuItem wolfItem = new JMenuItem("Wolf");
+                wolfItem.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        addOrganism(new Wolf(currentRow, currentCol));
+                        updateGame();
+                        creationMenu.setVisible(false);
+                    }
+                });
+                creationMenu.add(wolfItem);
+
+                JMenuItem humanItem = new JMenuItem("Human");
+                humanItem.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        addOrganism(new Human(currentRow, currentCol));
+                        updateGame();
+                        creationMenu.setVisible(false);
+                    }
+                });
+                creationMenu.add(humanItem);
+
+                cell.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        if (getOrganism(currentRow, currentCol) == null) {
+                            humanItem.setEnabled(human == null);
+
+                            // Show menu at mouse cursor
+                            creationMenu.show(e.getComponent(), e.getX(), e.getY());
+
+                            // Close after pressing any key
+                            Component invoker = e.getComponent();
+
+                            KeyListener closeOnKey = new KeyAdapter() {
+                                @Override
+                                public void keyPressed(KeyEvent e) {
+                                    creationMenu.setVisible(false);
+                                    invoker.removeKeyListener(this);
+                                }
+                            };
+
+                            invoker.addKeyListener(closeOnKey);
+                            invoker.requestFocusInWindow();
+                        }
+                    }
+                });
+
+
+
                 gamePanel.add(cell);
                 cells[i][j] = cell;
             }
