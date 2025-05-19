@@ -77,7 +77,7 @@ public abstract class World {
                 if (order.get(j).getInitiative() > order.get(i).getInitiative()) {
                     Collections.swap(order, i, j);
                 }
-            else if (order.get(j).getInitiative() == order.get(i).getInitiative() && order.get(j).getAge() > order.get(i).getAge()) {
+                else if (order.get(j).getInitiative() == order.get(i).getInitiative() && order.get(j).getAge() > order.get(i).getAge()) {
                     Collections.swap(order, i, j);
                 }
             }

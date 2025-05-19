@@ -1,6 +1,7 @@
 package main.java.wordsim.animals;
 
 import main.java.wordsim.Organism;
+import main.java.wordsim.plants.Plant;
 
 import java.awt.*;
 import java.util.Random;
@@ -127,8 +128,17 @@ public class Fox extends Animal {
                 world.appendLog(this.getName() + ": Moved to (" + Integer.toString(newY) + ", " + Integer.toString(newX) + ")\n");
                 y = newY;
                 x = newX;
-            } else {
-                collision(other);
+            }
+            else {
+                if (other instanceof Plant) {
+                    y = newY;
+                    x = newX;
+                    world.appendLog(getName() + ": Moved to (" + Integer.toString(newY) + ", " + Integer.toString(newX) + ")");
+                    other.collision(this);
+                }
+                else {
+                    this.collision(other);
+                }
             }
         }
     }
