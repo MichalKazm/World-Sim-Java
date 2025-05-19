@@ -1,6 +1,7 @@
 package main.java.wordsim;
 
 import main.java.wordsim.animals.*;
+import main.java.wordsim.plants.Dandelion;
 import main.java.wordsim.plants.Grass;
 import main.java.wordsim.worlds.WorldGrid;
 
@@ -18,6 +19,7 @@ public class Main {
         world.addOrganism(new Turtle(7, 7));
         world.addOrganism(new Antelope(12, 12));
         world.addOrganism(new Grass(25, 45));
+        world.addOrganism(new Dandelion(0, 35));
 
         world.updateGame();
     }
