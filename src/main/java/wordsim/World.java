@@ -6,6 +6,7 @@ import main.java.wordsim.plants.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -279,8 +280,6 @@ public class World {
                     }
                 });
 
-
-
                 gamePanel.add(cell);
                 cells[i][j] = cell;
             }
@@ -348,6 +347,29 @@ public class World {
 
         // Initialize button panel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+
+        JButton loadButton = new JButton("Load");
+        loadButton.setFocusable(false);
+
+        loadButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                load();
+            }
+        });
+        buttonPanel.add(loadButton);
+
+        JButton saveButton = new JButton("Save");
+        saveButton.setFocusable(false);
+
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                save();
+            }
+        });
+        buttonPanel.add(saveButton);
+
         JButton nextTurnButton = new JButton("Next turn");
         nextTurnButton.setFocusable(false);
 
@@ -411,6 +433,9 @@ public class World {
             }
         }
 
+        // Display latest logs
+        logs.setCaretPosition(logs.getDocument().getLength());
+
         frame.revalidate();
         frame.repaint();
     }
@@ -430,11 +455,134 @@ public class World {
             }
         }
 
-        // Display latest logs
-        logs.setCaretPosition(logs.getDocument().getLength());
-
         removeDead();
         updateGame();
         turn++;
+    }
+
+    public void save() {
+        try {
+            PrintWriter saveFile = new PrintWriter(new FileWriter("save.txt"));
+            saveFile.println(rows);
+            saveFile.println(cols);
+            saveFile.println(turn);
+            saveFile.println("---");
+            for (Organism organism : order) {
+                saveFile.println(organism.getName().split(" ")[0] + ";" + organism.getY() + ";" + organism.getX() + ";" + organism.getAge() + ";" + organism.getStrength());
+            }
+            saveFile.println("---");
+
+            saveFile.println(logs.getText());
+
+            if (human != null) {
+                saveFile.println("---");
+                saveFile.println(human.getAbilityTimer());
+            }
+
+            saveFile.close();
+        }
+        catch (IOException e) {
+            appendLog("ERROR: Cannot save the game!");
+            e.printStackTrace();
+        }
+    }
+
+    public void load() {
+        try {
+            BufferedReader saveFile = new BufferedReader(new FileReader("save.txt"));
+
+            String line;
+
+            this.rows = Integer.parseInt(saveFile.readLine());
+            this.cols = Integer.parseInt(saveFile.readLine());
+            this.turn = Integer.parseInt(saveFile.readLine());
+
+            this.human = null;
+            this.order = new ArrayList<>();
+            this.cells = new JPanel[rows][cols];
+
+            this.frame.dispose();
+            this.frame = new JFrame("Simulator");
+
+            line = saveFile.readLine(); // ---
+
+            while((line = saveFile.readLine()) != null) {
+                if (line.equals("---")) {
+                    break;
+                }
+
+                String name = line.split(";")[0];
+                int y = Integer.parseInt(line.split(";")[1]);
+                int x = Integer.parseInt(line.split(";")[2]);
+                int age = Integer.parseInt(line.split(";")[3]);
+                int strength = Integer.parseInt(line.split(";")[4]);
+
+                Organism newOrganism = null;
+
+                switch (name) {
+                    case "Antelope":
+                        newOrganism = new Antelope(y, x);
+                        break;
+                    case "Fox":
+                        newOrganism = new Fox(y, x);
+                        break;
+                    case "Human":
+                        newOrganism = new Human(y, x);
+                        break;
+                    case "Sheep":
+                        newOrganism = new Sheep(y, x);
+                        break;
+                    case "Turtle":
+                        newOrganism = new Turtle(y, x);
+                        break;
+                    case "Wolf":
+                        newOrganism = new Wolf(y, x);
+                        break;
+                    case "Dandelion":
+                        newOrganism = new Dandelion(y, x);
+                        break;
+                    case "Deadly":
+                        newOrganism = new DeadlyNightshade(y, x);
+                        break;
+                    case "Grass":
+                        newOrganism = new Grass(y, x);
+                        break;
+                    case "Guarana":
+                        newOrganism = new Guarana(y, x);
+                        break;
+                    case "Hogweed":
+                        newOrganism = new Hogweed(y, x);
+                        break;
+                }
+
+                if (newOrganism != null) {
+                    newOrganism.setAge(age);
+                    newOrganism.setStrength(strength);
+
+                    addOrganism(newOrganism);
+                }
+            }
+
+            this.logs = new JTextArea();
+
+            while((line = saveFile.readLine()) != null) {
+                if (line.trim().isEmpty()) {
+                    break;
+                }
+                appendLog(line + "\n");
+            }
+
+            if (human != null) {
+                line = saveFile.readLine();
+                human.setAbilityTimer(Integer.parseInt(saveFile.readLine()));
+            }
+
+            saveFile.close();
+            initWindow();
+        }
+        catch (IOException e) {
+            appendLog("ERROR: Cannot load the game!");
+            e.printStackTrace();
+        }
     }
 }

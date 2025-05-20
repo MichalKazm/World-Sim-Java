@@ -66,6 +66,8 @@ public abstract class Organism {
 
     public void setStrength(int strength) { this.strength = strength; }
 
+    public void setAge(int age) { this.age = age; }
+
     public abstract String getName();
 
     public abstract Organism createNew(int y, int x);

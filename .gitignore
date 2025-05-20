@@ -41,3 +41,6 @@ build/
 
 # Other
 *.swp
+
+# Save file
+save.txt
